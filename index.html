@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 Firebase 일기장</title>
+    <style>
+        /* style.css 내용 포함 */
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); overflow: hidden; }
+        header { background: linear-gradient(to right, #4a6bdf, #3b5ac0); color: white; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.8rem; }
+        .form-container, .write-section, .list-section { padding: 25px; }
+        input, textarea, select, button { width: 100%; padding: 12px 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        textarea { resize: vertical; min-height: 120px; }
+        button { background: #4a6bdf; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #3b5ac0; }
+        .diary-entry { border: 1px solid #eee; padding: 18px; margin: 12px 0; border-radius: 12px; background: #f9f9f9; }
+        .mood { font-size: 1.6rem; }
+        .delete-btn { background: #e74c3c; padding: 6px 12px; width: auto; display: inline-block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📖 나의 일기장</h1>
+            <div>
+                <button id="login-btn">로그인</button>
+                <button id="logout-btn" style="display:none;">로그아웃</button>
+            </div>
+        </header>
+
+        <div id="login-form" class="form-container">
+            <h2>로그인 / 회원가입</h2>
+            <input type="email" id="email" placeholder="이메일" required>
+            <input type="password" id="password" placeholder="비밀번호 (6자 이상)" required>
+            <button id="signin-btn">로그인</button>
+            <button id="signup-btn">회원가입</button>
+        </div>
+
+        <div id="main-app" style="display:none;">
+            <div class="write-section">
+                <h2>새 일기 쓰기</h2>
+                <input type="text" id="title" placeholder="제목을 입력하세요">
+                <textarea id="content" rows="6" placeholder="오늘의 이야기를 적어보세요..."></textarea>
+                <select id="mood">
+                    <option value="😊">😊 좋음</option>
+                    <option value="😐">😐 보통</option>
+                    <option value="😢">😢 슬픔</option>
+                    <option value="😡">😡 화남</option>
+                </select>
+                <button id="save-btn">일기 저장하기</button>
+            </div>
+
+            <div class="list-section">
+                <h2>내 일기 목록</h2>
+                <div id="diary-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        // ================== Firebase Config ==================
+  	const firebaseConfig = {
+ 		apiKey: "AIzaSyDAOgI9O9CTBynHjkQNj60XDaFUtZkM0bw",
+		authDomain: "diary-e4ae9.firebaseapp.com",
+		  projectId: "diary-e4ae9",
+		  storageBucket: "diary-e4ae9.firebasestorage.app",
+		  messagingSenderId: "402785131426",
+		  appId: "1:402785131426:web:1ce7a3fd20ae06647ab0fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ... (나머지 app.js 코드가 이어집니다)
+        const loginForm = document.getElementById('login-form');
+        const mainApp = document.getElementById('main-app');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const diaryList = document.getElementById('diary-list');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginForm.style.display = 'none';
+                mainApp.style.display = 'block';
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'block';
+                loadDiaries(user.uid);
+            } else {
+                loginForm.style.display = 'block';
+                mainApp.style.display = 'none';
+                loginBtn.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        });
+
+        document.getElementById('signup-btn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert('회원가입 성공! 자동 로그인 됩니다.');
+            } catch (error) {
+                alert('회원가입 실패: ' + error.message);
+            }
+        });
+
+        document.getElementById('signin-btn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                alert('로그인 실패: ' + error.message);
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => signOut(auth));
+
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) return alert('로그인이 필요합니다.');
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const mood = document.getElementById('mood').value;
+            if (!title || !content) return alert('제목과 내용을 입력해주세요.');
+
+            try {
+                await addDoc(collection(db, "diaries"), {
+                    uid: user.uid,
+                    title, content, mood,
+                    createdAt: serverTimestamp(),
+                    date: new Date().toISOString().split('T')[0]
+                });
+                alert('일기가 저장되었습니다!');
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                loadDiaries(user.uid);
+            } catch (e) {
+                alert('저장 실패: ' + e.message);
+            }
+        });
+
+        async function loadDiaries(uid) {
+            diaryList.innerHTML = '<p>불러오는 중...</p>';
+            try {
+                const q = query(collection(db, "diaries"), where("uid", "==", uid), orderBy("createdAt", "desc"));
+                const snapshot = await getDocs(q);
+                diaryList.innerHTML = '';
+                if (snapshot.empty) {
+                    diaryList.innerHTML = '<p>아직 일기가 없습니다. 첫 일기를 작성해보세요!</p>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const div = document.createElement('div');
+                    div.className = 'diary-entry';
+                    div.innerHTML = `
+                        <span class="mood">${data.mood}</span>
+                        <h3>${data.title}</h3>
+                        <small>${data.date}</small>
+                        <p>${data.content.substring(0, 120)}${data.content.length > 120 ? '...' : ''}</p>
+                        <button class="delete-btn" data-id="${docSnap.id}">삭제</button>
+                    `;
+                    diaryList.appendChild(div);
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (confirm('삭제하시겠습니까?')) {
+                            await deleteDoc(doc(db, "diaries", btn.dataset.id));
+                            loadDiaries(uid);
+                        }
+                    });
+                });
+            } catch (e) {
+                diaryList.innerHTML = '<p>불러오기 실패</p>';
+            }
+        }
+    </script>
+</body>
+</html>

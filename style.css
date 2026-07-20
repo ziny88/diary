@@ -1,0 +1,117 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(to right, #4a6bdf, #3b5ac0);
+    color: white;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.form-container, .write-section, .list-section {
+    padding: 25px;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+button {
+    background: #4a6bdf;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 5px;
+}
+
+button:hover {
+    background: #3b5ac0;
+    transform: translateY(-2px);
+}
+
+.diary-entry {
+    border: 1px solid #eee;
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 12px;
+    background: #f9f9f9;
+    transition: all 0.2s;
+}
+
+.diary-entry:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+}
+
+.diary-entry h3 {
+    margin: 8px 0 6px 0;
+    color: #333;
+}
+
+.mood {
+    font-size: 1.6rem;
+    margin-right: 8px;
+}
+
+small {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    width: auto;
+    display: inline-block;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+    .container {
+        margin: 10px;
+        border-radius: 12px;
+    }
+}
