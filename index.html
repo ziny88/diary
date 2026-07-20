@@ -6,33 +6,15 @@
     <title>나의 일기장</title>
     <style>
         * { box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            margin: 0; padding: 20px; min-height: 100vh; 
-        }
-        .container { 
-            max-width: 800px; margin: 0 auto; background: white; 
-            border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); overflow: hidden; 
-        }
-        header { 
-            background: #4a6bdf; color: white; padding: 20px; 
-            display: flex; justify-content: space-between; align-items: center; 
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); overflow: hidden; }
+        header { background: #4a6bdf; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         h1 { margin: 0; font-size: 1.8rem; }
         .section { padding: 25px; }
-        input, textarea, select, button { 
-            width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; 
-            border-radius: 8px; font-size: 16px; 
-        }
-        button { 
-            background: #4a6bdf; color: white; border: none; cursor: pointer; font-weight: bold; 
-        }
+        input, textarea, select, button { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        button { background: #4a6bdf; color: white; border: none; cursor: pointer; font-weight: bold; }
         button:hover { background: #3b5ac0; }
-        .diary-entry { 
-            border: 1px solid #eee; padding: 18px; margin: 12px 0; 
-            border-radius: 12px; background: #f9f9f9; 
-        }
+        .diary-entry { border: 1px solid #eee; padding: 18px; margin: 12px 0; border-radius: 12px; background: #f9f9f9; }
         .delete-btn { background: #e74c3c; color: white; padding: 6px 12px; border: none; border-radius: 6px; }
     </style>
 </head>
@@ -74,12 +56,12 @@
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyDA0gI909CTBynHjkQNj60XDaFUtZkM8bw",
+          apiKey: "AIzaSyDA0gI9O9CTBynHjkQNj60XDaFUtZkM0bw",
           authDomain: "diary-e4ae9.firebaseapp.com",
           projectId: "diary-e4ae9",
           storageBucket: "diary-e4ae9.firebaseapp.com",
           messagingSenderId: "402785131426",
-          appId: "1:402785131426:web:1ce7a3fd20e06647ab0fb"
+          appId: "1:402785131426:web:1ce7a3fd20ae06647ab0fb"
         };
 
         const app = initializeApp(firebaseConfig);
