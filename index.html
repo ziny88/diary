@@ -85,14 +85,18 @@
                 <div><label>시작일</label><input type="date" id="startDate"></div>
                 <div><label>종료일</label><input type="date" id="endDate"></div>
             </div>
-            <select id="quickColor" style="margin-bottom:12px;">
-                <option value="#4a6bff">업무 (파랑)</option>
-                <option value="#ffc107">개인 (노랑)</option>
-                <option value="#4caf50">건강 (초록)</option>
-                <option value="#9c27b0">공부 (보라)</option>
-                <option value="#f44336">약속 (빨강)</option>
-                <option value="#607d8b">기타 (회색)</option>
-            </select>
+           <select id="quickColor" style="margin-bottom:12px;">
+	   		 <option value="#f44336">빨강</option>
+    	 	 <option value="#ff9800">주황</option>
+	         <option value="#ffc107">노랑</option>
+    		 <option value="#4caf50">초록</option>
+     		 <option value="#00bcd4">청록</option>
+    		 <option value="#4a6bff" selected>파랑</option>
+    		 <option value="#3f51b5">남색</option>
+    		 <option value="#9c27b0">보라</option>
+    		 <option value="#e91e63">분홍</option>
+    		 <option value="#607d8b">회색</option>
+	     </select>
             <button onclick="addQuickEvent()" class="register-btn">✅ 이벤트 등록하기</button>
         </div>
     </div>
@@ -135,13 +139,17 @@
         let currentTheme = 0;
         const themes = ['theme-light', 'theme-dark', 'theme-soft', 'theme-nature'];
         const colors = [
-            {name: "업무", value: "#4a6bff"},
-            {name: "개인", value: "#ffc107"},
-            {name: "건강", value: "#4caf50"},
-            {name: "공부", value: "#9c27b0"},
-            {name: "약속", value: "#f44336"},
-            {name: "기타", value: "#607d8b"}
-        ];
+   		 	{name: "빨강", value: "#f44336"},
+  		 	{name: "주황", value: "#ff9800"},
+    		{name: "노랑", value: "#ffc107"},
+  		 	{name: "초록", value: "#4caf50"},
+		 	{name: "청록", value: "#00bcd4"},
+		 	{name: "파랑", value: "#4a6bff"},
+		 	{name: "남색", value: "#3f51b5"},
+		 	{name: "보라", value: "#9c27b0"},
+		 	{name: "분홍", value: "#e91e63"},
+		 	{name: "회색", value: "#607d8b"}
+		];
         function isDarkColor(hex) {
             const r = parseInt(hex.substr(1,2),16);
             const g = parseInt(hex.substr(3,2),16);
